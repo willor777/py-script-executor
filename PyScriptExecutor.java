@@ -1,19 +1,17 @@
-package tools.py_script_executor;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-public class PyScriptExector {
+public class PyScriptExecutor {
 
     public String path;
 
     public LinkedList<String> params = new LinkedList<>();
 
-    public PyScriptExector(String path){
+    public PyScriptExecutor(String path){
         this.path = path;
     }
 
@@ -23,39 +21,25 @@ public class PyScriptExector {
      */
     public void addParam(String key, String val){
 
-        if(key.contains(",")){
-            System.out.println("" +
-                    "[ Critical Warning - ScriptExecutor - You put a ',' in a param which will cause py to error ]\n" +
-                    "Key Value Pair that caused error: " + key + " : " + val);
-            return;
-        }
-
-        String param = key + ":" + val;
-
-        params.add(param);
-
+        String joinedParam = "$" + key + ":" + val + "$";
+        this.params.add(joinedParam);
     }
 
 
-    public String getParamsForPy(){
+    public String getParamsForPy() {
 
-        String baseParamString = "";
+        // Params will start end and be split with $$
+        String formattedParams = "$";
 
-        if(baseParamString.length() > 0){
-
-
-            for(String s: params){
-
-                baseParamString = baseParamString + s +"|";
+        if (!(this.params.size() == 0)) {
+            for (String s : params) {
+                formattedParams = formattedParams + s;
             }
-
-            // Remove the trailing " | "
-            baseParamString = baseParamString.substring(0,baseParamString.length() -1);
-
+        } else {
+            return "$$NoParams:None$$";
         }
-
-        return baseParamString;
-
+        formattedParams = formattedParams + "$";
+        return formattedParams;
     }
 
 
@@ -214,8 +198,6 @@ public class PyScriptExector {
 
 
     public void runScriptDisplayOutput(){
-
-
         ProcessBuilder pBuilder = new ProcessBuilder("python",
                 path, getParamsForPy());
 
