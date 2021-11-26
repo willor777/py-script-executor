@@ -2,17 +2,23 @@ import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class PyScriptExecutor {
 
-    public String path;
+    public Path path;
 
     public LinkedList<String> params = new LinkedList<>();
 
-    public PyScriptExecutor(String path){
+    public PyScriptExecutor(Path path){
         this.path = path;
+    }
+
+    public PyScriptExecutor(String path){
+        this.path = Paths.get(path);
     }
 
 
@@ -48,7 +54,7 @@ public class PyScriptExecutor {
      * * </h4>*/
     public LinkedList<String> runScriptGetLinkedListOutput(){
         ProcessBuilder pBuilder = new ProcessBuilder("python",
-                path, getParamsForPy());
+                path.toString(), getParamsForPy());
 
         pBuilder.redirectErrorStream(true);
         try{
@@ -85,7 +91,7 @@ public class PyScriptExecutor {
      * </h4> <h2>Intended for use with scripts that return a single JSON String</h2>*/
     public HashMap<String, String> runScriptGetSingleMap(){
         ProcessBuilder pBuilder = new ProcessBuilder("python",
-                path, getParamsForPy());
+                path.toString(), getParamsForPy());
 
 //        pBuilder.redirectErrorStream(true);
         try{
@@ -141,7 +147,7 @@ public class PyScriptExecutor {
      * </h4> <h2>Intended for use on scripts with multiple return JSON strings</h2>*/
     public LinkedList<HashMap<String, String>> runScriptGetMultipleMaps(){
         ProcessBuilder pBuilder = new ProcessBuilder("python",
-                path, getParamsForPy());
+                path.toString(), getParamsForPy());
 
         pBuilder.redirectErrorStream(true);
         try{
@@ -199,7 +205,7 @@ public class PyScriptExecutor {
 
     public void runScriptDisplayOutput(){
         ProcessBuilder pBuilder = new ProcessBuilder("python",
-                path, getParamsForPy());
+                path.toString(), getParamsForPy());
 
         pBuilder.redirectErrorStream(true);
         try{
