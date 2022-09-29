@@ -1,6 +1,5 @@
 INSTRUCTIONS...
 
-* First off i just started studying Java a couple weeks ago so
 
 - All py components need to be in the same dir i believe.
 - Create the ScriptExecutor class
